@@ -4,3 +4,41 @@
 ## 遊戲機制
 遊戲基本會自動運作，隨機從事件池觸發事件，每次事件都會影響玩家的人生。
 玩家基本數值有健康、智慧、魅力、社交、運氣，有些特殊數值是隱藏的，需要解鎖特定劇情線才會出現（例如法術、權力），部分事件需要玩家擁有足夠的數值才能成功或提高機率，還有事件需要玩家做出決策。
+
+## 目前可執行版本
+目前已提供可直接用瀏覽器開啟的基礎版本，包含：
+- 標題畫面
+- 天賦選擇與初始值設定畫面
+- 遊戲主畫面（顯示狀態、事件、回合推進）
+
+### 啟動方式
+1. 進入專案目錄
+2. 直接以瀏覽器開啟 `index.html`
+
+## GitHub Pages 自動部署
+本專案已新增 GitHub Actions，自動將靜態檔案部署到 GitHub Pages。
+
+### 觸發條件
+- push 到 `main` 分支時自動部署
+- 可在 Actions 頁面手動執行
+
+### 第一次啟用需要做的事
+1. 到 GitHub Repository 的 **Settings > Pages**
+2. 在 **Build and deployment** 的 **Source** 選擇 **GitHub Actions**
+
+## 基礎框架設計
+### 1) Page 瀏覽切換
+- 使用 hash page（`#title` / `#setup` / `#game`）切換畫面
+- 每個畫面對應一個 section，透過 router 控制顯示
+
+### 2) 玩家狀態模型
+- `stats`: 健康、智慧、魅力、社交、運氣
+- `hiddenStats`: 例如法術、權力（預設隱藏）
+- `traits`: 已選天賦
+- `statusTags`: 玩家狀態標記（例如 `bookworm`、`popular`、`mystic`）
+- `eventLog`: 事件紀錄（可作為後續分支與成就條件）
+
+### 3) 事件框架
+- 事件由統一資料結構定義：標題、描述、標記 tags、觸發條件 condition、選項 choices
+- 選項可直接更新玩家狀態，並可附帶 `addTags`、`discoverHiddenStats`
+- 新增事件只需擴充事件池，不必改動主流程

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LifetimeEx</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="page is-active" data-page="title">
+      <h1>LifetimeEx</h1>
+      <p>一款可擴充事件的人生模擬遊戲</p>
+      <button id="go-setup">開始新人生</button>
+    </section>
+
+    <section class="page" data-page="setup">
+      <h2>選擇天賦與初始值</h2>
+      <div id="trait-list" class="card-list"></div>
+
+      <h3>分配初始點數（共 10 點）</h3>
+      <div id="stat-config" class="stat-grid"></div>
+      <p id="points-left">剩餘點數：10</p>
+
+      <div class="actions">
+        <button id="back-title">返回標題</button>
+        <button id="start-game">進入遊戲</button>
+      </div>
+      <p id="setup-message" class="message"></p>
+    </section>
+
+    <section class="page" data-page="game">
+      <header class="game-header">
+        <h2>人生進行中</h2>
+        <p id="turn-indicator"></p>
+      </header>
+
+      <div class="panel">
+        <h3>玩家狀態</h3>
+        <ul id="stats-view"></ul>
+      </div>
+
+      <div class="panel">
+        <h3 id="event-title">事件標題</h3>
+        <p id="event-description">按下「下一事件」開始。</p>
+        <div id="event-choices" class="actions"></div>
+      </div>
+
+      <div class="actions">
+        <button id="next-event">下一事件</button>
+        <button id="restart">重新開始</button>
+      </div>
+
+      <div class="panel">
+        <h3>事件紀錄</h3>
+        <ul id="event-log"></ul>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
