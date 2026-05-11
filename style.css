@@ -253,6 +253,8 @@ button:disabled {
   color: var(--text-2);
   font-size: 14px;
   margin-top: 4px;
+  max-width: min(400px, 90%);
+  margin-inline: auto;
 }
 
 .setup-block {

@@ -15,6 +15,7 @@ const HIDDEN_STATS = {
 const START_POINTS = 10;
 const MAX_TRAITS = 2;
 const MAX_EVENT_LOG_DISPLAY = 8;
+const STAT_BAR_MAX = 15;
 
 const STAT_LABELS = {
   health: "健康",
@@ -353,7 +354,6 @@ function pickEvent() {
 }
 
 function renderState() {
-  const STAT_BAR_MAX = 15;
   turnIndicator.textContent = `第 ${state.turn} 回合`;
   statsView.innerHTML = "";
 
