@@ -203,7 +203,7 @@ function renderTraitOptions() {
   traitList.innerHTML = "";
   TRAITS.forEach((trait) => {
     const wrapper = document.createElement("label");
-    wrapper.className = "trait-card";
+    wrapper.className = "trait-card trait-option";
     wrapper.innerHTML = `
       <input type="checkbox" value="${trait.id}" />
       <strong>${trait.name}</strong>
@@ -217,7 +217,7 @@ function renderStatConfig() {
   statConfig.innerHTML = "";
   STAT_KEYS.forEach((key) => {
     const label = document.createElement("label");
-    label.className = "trait-card";
+    label.className = "trait-card stat-item";
     label.innerHTML = `
       <span>${getLabel(STAT_LABELS, key, "stat")}</span>
       <input type="number" min="0" value="0" data-stat="${key}" />
