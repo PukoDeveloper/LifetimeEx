@@ -220,7 +220,7 @@ function renderStatConfig() {
     label.className = "trait-card";
     label.innerHTML = `
       <span>${getLabel(STAT_LABELS, key, "stat")}</span>
-      <input type="number" min="0" max="${START_POINTS}" value="0" data-stat="${key}" />
+      <input type="number" min="0" value="0" data-stat="${key}" />
     `;
     statConfig.appendChild(label);
   });
@@ -308,10 +308,6 @@ function pickEvent() {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
-function formatEventLogEntry(tags, title) {
-  return `[${tags.join(",")}] ${title}`;
-}
-
 function renderState() {
   turnIndicator.textContent = `第 ${state.turn} 回合`;
   statsView.innerHTML = "";
@@ -357,7 +353,7 @@ function renderCurrentEvent() {
     button.textContent = choice.text;
     button.addEventListener("click", () => {
       choice.effect(state);
-      state.eventLog.push(formatEventLogEntry(state.currentEvent.tags, state.currentEvent.title));
+      state.eventLog.push(`[${state.currentEvent.tags.join(",")}] ${state.currentEvent.title}`);
       state.currentEvent = null;
       nextEventButton.disabled = false;
       renderState();
