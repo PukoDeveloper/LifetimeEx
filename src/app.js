@@ -13,6 +13,20 @@ const HIDDEN_STATS = {
 
 const START_POINTS = 10;
 const MAX_TRAITS = 2;
+const MAX_EVENT_LOG_DISPLAY = 8;
+
+const STAT_LABELS = {
+  health: "健康",
+  intelligence: "智慧",
+  charm: "魅力",
+  social: "社交",
+  luck: "運氣",
+};
+
+const HIDDEN_STAT_LABELS = {
+  magic: "法術",
+  power: "權力",
+};
 
 const TRAITS = [
   {
@@ -276,19 +290,23 @@ function pickEvent() {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
+function formatEventLogTag(tags, title) {
+  return `[${tags.join(",")}] ${title}`;
+}
+
 function renderState() {
   turnIndicator.textContent = `第 ${state.turn} 回合`;
   statsView.innerHTML = "";
 
   Object.entries(state.stats).forEach(([key, value]) => {
     const li = document.createElement("li");
-    li.textContent = `${key}: ${value}`;
+    li.textContent = `${STAT_LABELS[key] ?? key}: ${value}`;
     statsView.appendChild(li);
   });
 
   state.visibleHiddenStats.forEach((key) => {
     const li = document.createElement("li");
-    li.textContent = `${key}: ${state.hiddenStats[key]}`;
+    li.textContent = `${HIDDEN_STAT_LABELS[key] ?? key}: ${state.hiddenStats[key]}`;
     statsView.appendChild(li);
   });
 
@@ -299,7 +317,7 @@ function renderState() {
   }
 
   eventLogList.innerHTML = "";
-  [...state.eventLog].slice(-8).reverse().forEach((entry) => {
+  [...state.eventLog].slice(-MAX_EVENT_LOG_DISPLAY).reverse().forEach((entry) => {
     const li = document.createElement("li");
     li.textContent = entry;
     eventLogList.appendChild(li);
@@ -321,7 +339,7 @@ function renderCurrentEvent() {
     button.textContent = choice.text;
     button.addEventListener("click", () => {
       choice.effect(state);
-      state.eventLog.push(`[${state.currentEvent.tags.join(",")}] ${state.currentEvent.title}`);
+      state.eventLog.push(formatEventLogTag(state.currentEvent.tags, state.currentEvent.title));
       state.currentEvent = null;
       nextEventButton.disabled = false;
       renderState();
