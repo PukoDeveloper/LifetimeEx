@@ -1,0 +1,78 @@
+:root {
+  color-scheme: light dark;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #101727;
+  color: #f1f5f9;
+}
+
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.page {
+  display: none;
+  gap: 16px;
+}
+
+.page.is-active {
+  display: grid;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  background: #2563eb;
+  color: #fff;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.card-list {
+  display: grid;
+  gap: 8px;
+}
+
+.trait-card {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
+  gap: 8px;
+}
+
+.panel {
+  background: #16233b;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.message {
+  min-height: 20px;
+  color: #fde68a;
+}
+
+ul {
+  margin: 0;
+  padding-left: 18px;
+}
