@@ -5,6 +5,7 @@ const BASE_STATS = {
   social: 1,
   luck: 1,
 };
+const STAT_KEYS = Object.keys(BASE_STATS);
 
 const HIDDEN_STATS = {
   magic: 0,
@@ -35,6 +36,14 @@ function getLabel(labelMap, key, groupName) {
     return key;
   }
   return label;
+}
+
+function validateLabelCoverage() {
+  STAT_KEYS.forEach((key) => {
+    if (!STAT_LABELS[key]) {
+      console.warn(`Missing stat label config for key: ${key}`);
+    }
+  });
 }
 
 const TRAITS = [
@@ -206,7 +215,7 @@ function renderTraitOptions() {
 
 function renderStatConfig() {
   statConfig.innerHTML = "";
-  Object.keys(BASE_STATS).forEach((key) => {
+  STAT_KEYS.forEach((key) => {
     const label = document.createElement("label");
     label.className = "trait-card";
     label.innerHTML = `
@@ -326,7 +335,7 @@ function renderState() {
   }
 
   eventLogList.innerHTML = "";
-  [...state.eventLog].slice(-MAX_EVENT_LOG_DISPLAY).reverse().forEach((entry) => {
+  state.eventLog.slice(-MAX_EVENT_LOG_DISPLAY).reverse().forEach((entry) => {
     const li = document.createElement("li");
     li.textContent = entry;
     eventLogList.appendChild(li);
@@ -396,4 +405,5 @@ window.addEventListener("hashchange", route);
 
 renderTraitOptions();
 renderStatConfig();
+validateLabelCoverage();
 route();
