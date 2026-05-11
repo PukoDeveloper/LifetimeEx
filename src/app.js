@@ -15,6 +15,7 @@ const HIDDEN_STATS = {
 const START_POINTS = 10;
 const MAX_TRAITS = 2;
 const MAX_EVENT_LOG_DISPLAY = 8;
+const STAT_BAR_MAX = 15;
 
 const STAT_LABELS = {
   health: "健康",
@@ -27,6 +28,19 @@ const STAT_LABELS = {
 const HIDDEN_STAT_LABELS = {
   magic: "法術",
   power: "權力",
+};
+
+const STAT_ICONS = {
+  health: "❤️",
+  intelligence: "🧠",
+  charm: "✨",
+  social: "👥",
+  luck: "🍀",
+};
+
+const HIDDEN_STAT_ICONS = {
+  magic: "🔮",
+  power: "⚡",
 };
 
 function getLabel(labelMap, key, groupName) {
@@ -203,11 +217,16 @@ function renderTraitOptions() {
   traitList.innerHTML = "";
   TRAITS.forEach((trait) => {
     const wrapper = document.createElement("label");
-    wrapper.className = "trait-card trait-option";
+    wrapper.className = "trait-card";
     wrapper.innerHTML = `
       <input type="checkbox" value="${trait.id}" />
-      <strong>${trait.name}</strong>
-      <span>${trait.description}</span>
+      <div class="trait-content">
+        <div class="trait-header">
+          <strong class="trait-name">${trait.name}</strong>
+          <span class="trait-check">✓</span>
+        </div>
+        <span class="trait-desc">${trait.description}</span>
+      </div>
     `;
     traitList.appendChild(wrapper);
   });
@@ -216,14 +235,38 @@ function renderTraitOptions() {
 function renderStatConfig() {
   statConfig.innerHTML = "";
   STAT_KEYS.forEach((key) => {
-    const label = document.createElement("label");
-    label.className = "trait-card stat-item";
-    label.innerHTML = `
-      <span>${getLabel(STAT_LABELS, key, "stat")}</span>
-      <input type="number" min="0" value="0" data-stat="${key}" />
+    const labelText = getLabel(STAT_LABELS, key, "stat");
+    const icon = STAT_ICONS[key] || "";
+    const div = document.createElement("div");
+    div.className = "stat-item";
+    div.innerHTML = `
+      <div class="stat-label">
+        <span class="stat-icon">${icon}</span>${labelText}
+      </div>
+      <div class="stepper">
+        <button type="button" class="stepper-btn" data-stat="${key}" data-action="dec" aria-label="減少">−</button>
+        <input type="number" min="0" max="${START_POINTS}" value="0" data-stat="${key}" readonly />
+        <button type="button" class="stepper-btn" data-stat="${key}" data-action="inc" aria-label="增加">+</button>
+      </div>
     `;
-    statConfig.appendChild(label);
+    statConfig.appendChild(div);
   });
+
+  statConfig.querySelectorAll(".stepper-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const isInc = btn.dataset.action === "inc";
+      const input = btn.closest(".stepper").querySelector("input");
+      const currentVal = Number(input.value);
+      const left = START_POINTS - totalAllocatedPoints();
+      if (isInc && left > 0) {
+        input.value = currentVal + 1;
+      } else if (!isInc && currentVal > 0) {
+        input.value = currentVal - 1;
+      }
+      updatePointsLeft();
+    });
+  });
+
   updatePointsLeft();
 }
 
@@ -240,7 +283,9 @@ function totalAllocatedPoints() {
 
 function updatePointsLeft() {
   const left = START_POINTS - totalAllocatedPoints();
-  pointsLeft.textContent = `剩餘點數：${left}`;
+  pointsLeft.textContent = `剩餘 ${left} 點`;
+  pointsLeft.classList.toggle("low", left > 0 && left <= 3);
+  pointsLeft.classList.toggle("empty", left === 0);
 }
 
 function resetState() {
@@ -314,25 +359,55 @@ function renderState() {
 
   Object.entries(state.stats).forEach(([key, value]) => {
     const li = document.createElement("li");
-    li.textContent = `${getLabel(STAT_LABELS, key, "stat")}: ${value}`;
+    const icon = STAT_ICONS[key] || "";
+    const label = getLabel(STAT_LABELS, key, "stat");
+    const pct = Math.min(100, (value / STAT_BAR_MAX) * 100).toFixed(1);
+    li.className = "stat-row";
+    li.innerHTML = `
+      <div class="stat-row-header">
+        <span class="stat-row-name"><span class="stat-icon">${icon}</span>${label}</span>
+        <span class="stat-row-value">${value}</span>
+      </div>
+      <div class="stat-bar-track">
+        <div class="stat-bar-fill" data-stat="${key}" style="width:${pct}%"></div>
+      </div>
+    `;
     statsView.appendChild(li);
   });
 
   state.visibleHiddenStats.forEach((key) => {
     const li = document.createElement("li");
-    li.textContent = `${getLabel(HIDDEN_STAT_LABELS, key, "hidden stat")}: ${state.hiddenStats[key]}`;
+    const icon = HIDDEN_STAT_ICONS[key] || "";
+    const label = getLabel(HIDDEN_STAT_LABELS, key, "hidden stat");
+    const value = state.hiddenStats[key];
+    const pct = Math.min(100, (value / STAT_BAR_MAX) * 100).toFixed(1);
+    li.className = "stat-row";
+    li.innerHTML = `
+      <div class="stat-row-header">
+        <span class="stat-row-name"><span class="stat-icon">${icon}</span>${label}</span>
+        <span class="stat-row-value">${value}</span>
+      </div>
+      <div class="stat-bar-track">
+        <div class="stat-bar-fill" data-stat="${key}" style="width:${pct}%"></div>
+      </div>
+    `;
     statsView.appendChild(li);
   });
 
   if (state.statusTags.size) {
     const li = document.createElement("li");
-    li.textContent = `狀態標記: ${[...state.statusTags].join(", ")}`;
+    li.className = "status-tags-row";
+    const tags = [...state.statusTags]
+      .map((tag) => `<span class="status-tag">${tag}</span>`)
+      .join("");
+    li.innerHTML = `<span class="status-tags-label">狀態</span>${tags}`;
     statsView.appendChild(li);
   }
 
   eventLogList.innerHTML = "";
   state.eventLog.slice(-MAX_EVENT_LOG_DISPLAY).reverse().forEach((entry) => {
     const li = document.createElement("li");
+    li.className = "log-entry";
     li.textContent = entry;
     eventLogList.appendChild(li);
   });
@@ -350,6 +425,7 @@ function renderCurrentEvent() {
   eventChoices.innerHTML = "";
   state.currentEvent.choices.forEach((choice) => {
     const button = document.createElement("button");
+    button.className = "btn-choice";
     button.textContent = choice.text;
     button.addEventListener("click", () => {
       choice.effect(state);
@@ -396,7 +472,6 @@ document.querySelector("#restart").addEventListener("click", () => {
 
 nextEventButton.addEventListener("click", nextTurn);
 
-statConfig.addEventListener("input", updatePointsLeft);
 window.addEventListener("hashchange", route);
 
 renderTraitOptions();
