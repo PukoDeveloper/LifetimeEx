@@ -24,7 +24,7 @@
 - `stats`: 健康、智慧、魅力、社交、運氣
 - `hiddenStats`: 例如法術、權力（預設隱藏）
 - `traits`: 已選天賦
-- `statusTags`: 玩家狀態標記（例如 `bookworm`、`streetwise`）
+- `statusTags`: 玩家狀態標記（例如 `bookworm`、`popular`、`mystic`）
 - `eventLog`: 事件紀錄（可作為後續分支與成就條件）
 
 ### 3) 事件框架
