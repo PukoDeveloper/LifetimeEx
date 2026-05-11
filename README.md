@@ -15,6 +15,17 @@
 1. 進入專案目錄
 2. 直接以瀏覽器開啟 `index.html`
 
+## GitHub Pages 自動部署
+本專案已新增 GitHub Actions，自動將靜態檔案部署到 GitHub Pages。
+
+### 觸發條件
+- push 到 `main` 分支時自動部署
+- 可在 Actions 頁面手動執行
+
+### 第一次啟用需要做的事
+1. 到 GitHub Repository 的 **Settings > Pages**
+2. 在 **Build and deployment** 的 **Source** 選擇 **GitHub Actions**
+
 ## 基礎框架設計
 ### 1) Page 瀏覽切換
 - 使用 hash page（`#title` / `#setup` / `#game`）切換畫面
