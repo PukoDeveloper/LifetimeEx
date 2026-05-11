@@ -4,56 +4,86 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LifetimeEx</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
   <main class="app">
+    <!-- Title Page -->
     <section class="page is-active" data-page="title">
-      <h1>LifetimeEx</h1>
-      <p>一款可擴充事件的人生模擬遊戲</p>
-      <button id="go-setup">開始新人生</button>
-    </section>
-
-    <section class="page" data-page="setup">
-      <h2>選擇天賦與初始值</h2>
-      <div id="trait-list" class="card-list"></div>
-
-      <h3>分配初始點數（共 10 點）</h3>
-      <div id="stat-config" class="stat-grid"></div>
-      <p id="points-left">剩餘點數：10</p>
-
-      <div class="actions">
-        <button id="back-title">返回標題</button>
-        <button id="start-game">進入遊戲</button>
+      <div class="title-hero">
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <span class="title-tag">人生模擬遊戲</span>
+        <h1>LifetimeEx</h1>
+        <p class="hero-subtitle">探索無限可能的人生旅程，每個選擇都將塑造獨一無二的命運</p>
+        <button id="go-setup" class="btn-hero">✦ 開始新人生</button>
       </div>
-      <p id="setup-message" class="message"></p>
     </section>
 
+    <!-- Setup Page -->
+    <section class="page" data-page="setup">
+      <div class="page-hero">
+        <h2>塑造你的人生</h2>
+        <p>選擇天賦並分配初始屬性點數</p>
+      </div>
+
+      <div class="setup-block">
+        <div class="block-title">
+          <span class="block-icon">🌟</span>
+          <span>選擇天賦</span>
+          <span class="block-hint">最多 2 個</span>
+        </div>
+        <div id="trait-list" class="card-list"></div>
+      </div>
+
+      <div class="setup-block">
+        <div class="block-title">
+          <span class="block-icon">⚡</span>
+          <span>分配屬性點數</span>
+          <span id="points-left" class="points-pill">剩餘 10 點</span>
+        </div>
+        <div id="stat-config" class="stat-grid"></div>
+      </div>
+
+      <p id="setup-message" class="message"></p>
+
+      <div class="setup-footer">
+        <button id="back-title" class="btn-ghost">← 返回</button>
+        <button id="start-game" class="btn-primary">進入遊戲 →</button>
+      </div>
+    </section>
+
+    <!-- Game Page -->
     <section class="page" data-page="game">
       <header class="game-header">
-        <h2>人生進行中</h2>
-        <p id="turn-indicator"></p>
+        <div class="game-title-row">
+          <h2>人生進行中</h2>
+          <div id="turn-indicator" class="turn-chip"></div>
+        </div>
       </header>
 
-      <div class="panel">
-        <h3>玩家狀態</h3>
-        <ul id="stats-view"></ul>
+      <div class="panel stats-panel">
+        <div class="panel-title">📊 角色狀態</div>
+        <ul id="stats-view" class="stats-list"></ul>
       </div>
 
-      <div class="panel">
-        <h3 id="event-title">事件標題</h3>
-        <p id="event-description">按下「下一事件」開始。</p>
-        <div id="event-choices" class="actions"></div>
+      <div class="panel event-panel">
+        <h3 id="event-title" class="event-heading">事件標題</h3>
+        <p id="event-description" class="event-body">按下「下一事件」開始。</p>
+        <div id="event-choices" class="choice-grid"></div>
       </div>
 
-      <div class="actions">
-        <button id="next-event">下一事件</button>
-        <button id="restart">重新開始</button>
+      <div class="game-controls">
+        <button id="next-event" class="btn-primary">⚡ 下一事件</button>
+        <button id="restart" class="btn-ghost">↺ 重新開始</button>
       </div>
 
-      <div class="panel">
-        <h3>事件紀錄</h3>
-        <ul id="event-log"></ul>
+      <div class="panel log-panel">
+        <div class="panel-title">📜 事件紀錄</div>
+        <ul id="event-log" class="log-list"></ul>
       </div>
     </section>
   </main>
