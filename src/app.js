@@ -28,6 +28,15 @@ const HIDDEN_STAT_LABELS = {
   power: "權力",
 };
 
+function getLabel(labelMap, key, groupName) {
+  const label = labelMap[key];
+  if (!label) {
+    console.warn(`Missing ${groupName} label for key: ${key}`);
+    return key;
+  }
+  return label;
+}
+
 const TRAITS = [
   {
     id: "quick-learner",
@@ -201,7 +210,7 @@ function renderStatConfig() {
     const label = document.createElement("label");
     label.className = "trait-card";
     label.innerHTML = `
-      <span>${STAT_LABELS[key] ?? key}</span>
+      <span>${getLabel(STAT_LABELS, key, "stat")}</span>
       <input type="number" min="0" max="${START_POINTS}" value="0" data-stat="${key}" />
     `;
     statConfig.appendChild(label);
@@ -300,13 +309,13 @@ function renderState() {
 
   Object.entries(state.stats).forEach(([key, value]) => {
     const li = document.createElement("li");
-    li.textContent = `${STAT_LABELS[key] ?? key}: ${value}`;
+    li.textContent = `${getLabel(STAT_LABELS, key, "stat")}: ${value}`;
     statsView.appendChild(li);
   });
 
   state.visibleHiddenStats.forEach((key) => {
     const li = document.createElement("li");
-    li.textContent = `${HIDDEN_STAT_LABELS[key] ?? key}: ${state.hiddenStats[key]}`;
+    li.textContent = `${getLabel(HIDDEN_STAT_LABELS, key, "hidden stat")}: ${state.hiddenStats[key]}`;
     statsView.appendChild(li);
   });
 
